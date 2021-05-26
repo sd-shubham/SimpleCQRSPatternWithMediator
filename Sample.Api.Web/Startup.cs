@@ -23,7 +23,7 @@ namespace Sample.Api.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddInfrasStructure(_configuration);
-            services.AddApplication();
+            services.AddApplication(_configuration);
             services.AddControllers();
         }
 
@@ -32,10 +32,13 @@ namespace Sample.Api.Web
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/development-error");
+              //  app.UseDeveloperExceptionPage();
             }
 
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             //app.UseEndpoints(endpoints =>
             //{

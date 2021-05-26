@@ -1,4 +1,4 @@
-﻿using MediatR;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sample.Api.Application.Command;
 using Sample.Api.Application.Query;
@@ -8,16 +8,15 @@ namespace Sample.Api.Web.Controller
 {
     [ApiController]
     [Route("[controller]")]
-    public class EmployeeController: ControllerBase
+    [Authorize]
+    public class EmployeeController: APIController
     {
-        private readonly IMediator _mediator;
-        public EmployeeController(IMediator mediator) => _mediator = mediator;
         [HttpGet]
         public async Task<IActionResult> Get()
-            => Ok(await _mediator.Send(new GetAllEmployee()));
+            => Ok(await Mediator.Send(new GetAllEmployee()));
         [HttpPost]
         public async Task<IActionResult> Create(AddEmployeeCommand command)
-            => Ok(await _mediator.Send(command));
+            => Ok(await Mediator.Send(command));
 
     }
 }

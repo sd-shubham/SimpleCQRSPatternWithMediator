@@ -9,6 +9,7 @@ namespace Sample.Api.Application.Common
     {
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeAddress> EmployeeAddresses { get; set; }
+        public DbSet<User> Users{get;set;}
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

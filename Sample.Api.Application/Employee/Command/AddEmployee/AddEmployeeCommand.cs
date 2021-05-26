@@ -2,7 +2,6 @@ using AutoMapper;
 using MediatR;
 using Sample.Api.Application.Common;
 using Sample.Api.Application.Query;
-using Sample.Api.Domain.Common;
 using Sample.Api.Domain.Entity;
 using System.Collections.Generic;
 using System.Threading;
@@ -20,15 +19,13 @@ namespace Sample.Api.Application.Command
     public class AddEmployeeCommandhandler : IRequestHandler<AddEmployeeCommand, EmployeeGetDto>
     {
         private readonly IMapper _mapper;
-        private readonly IApplicationDbContext _dbContext;
-        public AddEmployeeCommandhandler(IMapper mapper,IApplicationDbContext dbContext) =>( _mapper,_dbContext) = (mapper,dbContext);
+        private readonly IEmployeeService _employeeSevice;
+        public AddEmployeeCommandhandler(IMapper mapper,IEmployeeService employeeSevice) 
+            =>( _mapper,_employeeSevice) = (mapper,employeeSevice);
         public async Task<EmployeeGetDto> Handle(AddEmployeeCommand request, CancellationToken cancellationToken)
         {
             // we can craete a seprate service and pass the create dto 
-            var employee = _mapper.Map<Employee>(_mapper.Map<EmployeeCreateDto>(request));
-            await _dbContext.Employees.AddAsync(employee);
-            await _dbContext.SaveChangesAsync();
-            return _mapper.Map<EmployeeGetDto>(employee);
+            return await _employeeSevice.Create(_mapper.Map<EmployeeCreateDto>(request));
         }
     }
 }
